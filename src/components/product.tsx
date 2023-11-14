@@ -20,7 +20,7 @@ interface ProductProps {
 }
 
 const Product: React.FC<ProductProps> = ({ data }) => {
-  const { items, addItem } = useCart();
+  const { addItem } = useCart();
 
   const handleBuyClick = () => {
     addItem(data.id);
