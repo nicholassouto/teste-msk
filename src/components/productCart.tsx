@@ -14,9 +14,10 @@ interface ProductCartProps {
     description: string;
     photo: string;
   };
+  quantity: number; // Nova propriedade para a quantidade do produto
 }
 
-const ProductCart: React.FC<ProductCartProps> = ({ product }) => {
+const ProductCart: React.FC<ProductCartProps> = ({ product, quantity }) => {
   return (
     <Container>
       <PhotoContainer>
@@ -28,7 +29,7 @@ const ProductCart: React.FC<ProductCartProps> = ({ product }) => {
       <PriceQuant>
         <div>
           <p>-</p>
-          <span>1</span>
+          <span>{quantity}</span>
           <p>+</p>
         </div>
         <section>

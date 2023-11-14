@@ -40,9 +40,9 @@ const BuyList: React.FC<BuyListProps> = ({
   setIsModalVisible,
 }) => {
   const { items, itemCount } = useCart();
-  
+
   const { data: allProducts, isLoading, isError } = useQuery<ProductData[]>(
-    ["allProducts", 1, 15, "id", "DESC"], // Adapte conforme necessário
+    ["allProducts", 1, 15, "id", "DESC"],
     async () => {
       const data = await fetchProducts(1, 15, "id", "DESC");
       return data;
@@ -53,7 +53,14 @@ const BuyList: React.FC<BuyListProps> = ({
     setIsModalVisible(!isModalVisible);
   };
 
-  const filteredProducts = allProducts?.filter((product) => items.includes(product.id)) || [];
+  const itemCounts: Record<number, number> = {};
+  items.forEach((itemId) => {
+    itemCounts[itemId] = (itemCounts[itemId] || 0) + 1;
+  });
+
+  const filteredProducts = allProducts?.filter((product) =>
+    items.includes(product.id)
+  );
 
   return (
     <Container style={{ display: isModalVisible ? "flex" : "none" }}>
@@ -65,14 +72,22 @@ const BuyList: React.FC<BuyListProps> = ({
       </ShopCart>
       <ProductsCart>
         {filteredProducts.map((product) => (
-          <ProductCart key={product.id} product={product} />
+          <ProductCart
+            key={product.id}
+            product={product}
+            quantity={itemCounts[product.id]}
+          />
         ))}
       </ProductsCart>
       <PriceQuant>
         <h2>Total:</h2>
         <p>
           R$
-          <span>{/* Calcule o total com base nos itens do carrinho */}</span>
+          <span>
+            {filteredProducts.reduce((total, product) => {
+              return total + product.price * itemCounts[product.id];
+            }, 0)}
+          </span>
         </p>
       </PriceQuant>
       <BuyProducts>
