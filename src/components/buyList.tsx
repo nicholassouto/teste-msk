@@ -1,9 +1,10 @@
+import React, { useState, useEffect } from "react";
 import {
-  BuyProducts,
   Container,
-  PriceQuant,
   ProductsCart,
   ShopCart,
+  PriceQuant,
+  BuyProducts,
 } from "@/styles/buyListComp";
 import ProductCart from "./productCart";
 import { useCart } from "../context/cartContext";
@@ -39,26 +40,42 @@ const BuyList: React.FC<BuyListProps> = ({
   isModalVisible,
   setIsModalVisible,
 }) => {
-  const { items, itemCount } = useCart();
-  
-  const { data: allProducts, isLoading, isError } = useQuery<ProductData[]>(
+  const { items, addItem, removeItem } = useCart();
+
+  const { data: allProducts, isSuccess } = useQuery<ProductData[]>(
     ["allProducts", 1, 15, "id", "DESC"],
     async () => {
-      const data = await fetchProducts(1, 15, "id", "DESC");
-      return data;
+      const response = await fetch(
+        `https://mks-frontend-challenge-04811e8151e6.herokuapp.com/api/v1/products?page=1&rows=15&sortBy=id&orderBy=DESC`
+      );
+      const data = await response.json();
+      return data.products;
     }
   );
+
+  const [itemCounts, setItemCounts] = useState<Record<number, number>>({});
+
+  useEffect(() => {
+    const counts: Record<number, number> = {};
+    items.forEach((itemId) => {
+      counts[itemId] = (counts[itemId] || 0) + 1;
+    });
+    setItemCounts(counts);
+  }, [items]);
 
   const handleToggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
 
-  const itemCounts: Record<number, number> = {};
-  items.forEach((itemId) => {
-    itemCounts[itemId] = (itemCounts[itemId] || 0) + 1;
-  });
+  const handleRemoveAll = (productId: number) => {
+    for (let i = 0; i < itemCounts[productId]; i++) {
+      removeItem(allProducts.find((product) => product.id === productId)!);
+    }
+  };
 
-  const filteredProducts = allProducts?.filter((product) => items.includes(product.id)) || [];
+  const filteredProducts = isSuccess
+    ? allProducts?.filter((product) => items.includes(product.id)) || []
+    : [];
 
   return (
     <Container style={{ display: isModalVisible ? "flex" : "none" }}>
@@ -73,7 +90,10 @@ const BuyList: React.FC<BuyListProps> = ({
           <ProductCart
             key={product.id}
             product={product}
-            quantity={itemCounts[product.id]}
+            quantity={itemCounts[product.id] || 0}
+            onIncrement={() => addItem(product)}
+            onDecrement={() => removeItem(product)}
+            onRemoveAll={() => handleRemoveAll(product.id)}
           />
         ))}
       </ProductsCart>

@@ -1,4 +1,3 @@
-// components/product.tsx
 import Image from "next/image";
 import shoppingBag from "@/assets/shopping-bag.svg";
 import {

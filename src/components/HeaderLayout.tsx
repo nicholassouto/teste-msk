@@ -1,10 +1,10 @@
-// components/HeaderComp.tsx
+
 import Image from "next/image";
 import { useCart } from "../context/cartContext";
 import cartImg from "@/assets/cart.svg";
 import { useState } from "react";
-import HeaderLayout from "@/styles/headerLayout"; // Corrigido o nome do import
-import BuyList from "./buyList"; // Importe o componente BuyList
+import HeaderLayout from "@/styles/headerLayout";
+import BuyList from "./buyList";
 
 const HeaderComp: React.FC = () => {
   const { itemCount } = useCart();

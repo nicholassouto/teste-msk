@@ -20,6 +20,7 @@ export const PhotoContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 `;
 
 export const NamePriceContainer = styled.div`
@@ -91,4 +92,15 @@ export const PriceQuant = styled.div`
     line-height: 1.5rem;
     color: #ffffff;
   }
+`;
+
+export const RemoveButton = styled.button`
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  color: black;
+  cursor: pointer;
 `;

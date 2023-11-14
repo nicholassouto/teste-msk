@@ -1,6 +1,5 @@
 import FooterLayout from "@/styles/footerLayout";
 
-// components/FooterLayout.tsx
 const FooterComp: React.FC = () => {
     return (
       <FooterLayout>

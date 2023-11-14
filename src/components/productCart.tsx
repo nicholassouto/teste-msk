@@ -1,9 +1,11 @@
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import {
   Container,
   NamePriceContainer,
   PhotoContainer,
   PriceQuant,
+  RemoveButton,
 } from "@/styles/productCartComp";
 
 interface ProductCartProps {
@@ -14,13 +16,43 @@ interface ProductCartProps {
     description: string;
     photo: string;
   };
-  quantity: number; // Adicionando a propriedade de quantidade
+  quantity: number;
+  onIncrement: () => void;
+  onDecrement: () => void;
+  onRemoveAll: () => void;
 }
 
-const ProductCart: React.FC<ProductCartProps> = ({ product, quantity }) => {
+const ProductCart: React.FC<ProductCartProps> = ({
+  product,
+  quantity,
+  onIncrement,
+  onDecrement,
+  onRemoveAll,
+}) => {
+  const [displayQuantity, setDisplayQuantity] = useState(quantity);
+
+  useEffect(() => {
+    setDisplayQuantity(quantity);
+  }, [quantity]);
+
+  const handleIncrement = () => {
+    onIncrement();
+  };
+
+  const handleDecrement = () => {
+    if (quantity > 1) {
+      onDecrement();
+    }
+  };
+
+  const handleRemoveAll = () => {
+    onRemoveAll();
+  };
+
   return (
     <Container>
       <PhotoContainer>
+        <RemoveButton onClick={handleRemoveAll}>X</RemoveButton>
         <Image src={product.photo} alt={product.name} width={117} height={148} />
       </PhotoContainer>
       <NamePriceContainer>
@@ -28,12 +60,12 @@ const ProductCart: React.FC<ProductCartProps> = ({ product, quantity }) => {
       </NamePriceContainer>
       <PriceQuant>
         <div>
-          <p>-</p>
-          <span>{quantity}</span>
-          <p>+</p>
+          <p onClick={handleDecrement}>-</p>
+          <span>{displayQuantity}</span>
+          <p onClick={handleIncrement}>+</p>
         </div>
         <section>
-          R$ <span>{product.price * quantity}</span> {/* Multiplicando pelo total de itens */}
+          R$ <span>{product.price * displayQuantity}</span>
         </section>
       </PriceQuant>
     </Container>

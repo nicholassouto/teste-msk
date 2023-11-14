@@ -1,17 +1,16 @@
-// context/cartContext.tsx
-import { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 interface Product {
   id: number;
   name: string;
   price: number;
-  // Adicione outras propriedades conforme necessário
 }
 
 interface CartContextProps {
   items: Product[];
   itemCount: number;
   addItem: (product: Product) => void;
+  removeItem: (product: Product) => void;
 }
 
 const CartContext = createContext<CartContextProps | undefined>(undefined);
@@ -25,8 +24,28 @@ export const CartProvider: React.FC = ({ children }) => {
     setItemCount((prevCount) => prevCount + 1);
   };
 
+  const removeItem = (product: Product) => {
+    setItems((prevItems) => {
+      const index = prevItems.findIndex((item) => item.id === product.id);
+
+      if (index !== -1) {
+        const newItems = [...prevItems];
+        newItems.splice(index, 1);
+        return newItems;
+      }
+
+      return prevItems;
+    });
+
+    setItemCount((prevCount) => Math.max(prevCount - 1, 0));
+  };
+
+  useEffect(() => {
+    console.log("Carrinho atualizado:", items);
+  }, [items]);
+
   return (
-    <CartContext.Provider value={{ items, itemCount, addItem }}>
+    <CartContext.Provider value={{ items, itemCount, addItem, removeItem }}>
       {children}
     </CartContext.Provider>
   );

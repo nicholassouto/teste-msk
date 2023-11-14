@@ -10,7 +10,7 @@ interface ProductData {
   name: string;
   price: number;
   description: string;
-  photo: string; // Alterei de imageUrl para photo
+  photo: string;
 }
 
 const fetchProducts = async (
@@ -23,7 +23,7 @@ const fetchProducts = async (
     `https://mks-frontend-challenge-04811e8151e6.herokuapp.com/api/v1/products?page=${page}&rows=${rows}&sortBy=${sortBy}&orderBy=${orderBy}`
   );
   const data = await response.json();
-  return data.products; // Alterei para retornar data.products
+  return data.products;
 };
 
 const Home: React.FC = () => {
