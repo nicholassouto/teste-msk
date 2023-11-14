@@ -40,7 +40,7 @@ const BuyList: React.FC<BuyListProps> = ({
   setIsModalVisible,
 }) => {
   const { items, itemCount } = useCart();
-
+  
   const { data: allProducts, isLoading, isError } = useQuery<ProductData[]>(
     ["allProducts", 1, 15, "id", "DESC"],
     async () => {
@@ -58,9 +58,7 @@ const BuyList: React.FC<BuyListProps> = ({
     itemCounts[itemId] = (itemCounts[itemId] || 0) + 1;
   });
 
-  const filteredProducts = allProducts?.filter((product) =>
-    items.includes(product.id)
-  );
+  const filteredProducts = allProducts?.filter((product) => items.includes(product.id)) || [];
 
   return (
     <Container style={{ display: isModalVisible ? "flex" : "none" }}>
