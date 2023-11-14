@@ -24,28 +24,11 @@ export const CartProvider: React.FC = ({ children }) => {
     setItemCount((prevCount) => prevCount + 1);
   };
 
-  const removeItem = (product: Product) => {
-    setItems((prevItems) => {
-      const index = prevItems.findIndex((item) => item.id === product.id);
-
-      if (index !== -1) {
-        const newItems = [...prevItems];
-        newItems.splice(index, 1);
-        return newItems;
-      }
-
-      return prevItems;
-    });
-
-    setItemCount((prevCount) => Math.max(prevCount - 1, 0));
-  };
-
   useEffect(() => {
-    console.log("Carrinho atualizado:", items);
   }, [items]);
 
   return (
-    <CartContext.Provider value={{ items, itemCount, addItem, removeItem }}>
+    <CartContext.Provider value={{ items, itemCount, addItem}}>
       {children}
     </CartContext.Provider>
   );

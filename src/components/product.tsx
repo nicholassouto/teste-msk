@@ -24,7 +24,6 @@ const Product: React.FC<ProductProps> = ({ data }) => {
 
   const handleBuyClick = () => {
     addItem(data.id);
-    console.log('Item adicionado ao carrinho. Itens no carrinho:', items.length + 1);
   };
 
   return (
