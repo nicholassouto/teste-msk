@@ -1,25 +1,28 @@
 // context/cartContext.tsx
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState } from "react";
+
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  // Adicione outras propriedades conforme necessário
+}
 
 interface CartContextProps {
-  items: number[];
-  itemCount: number; // Novo estado para a contagem de itens
-  addItem: (itemId: number) => void;
+  items: Product[];
+  itemCount: number;
+  addItem: (product: Product) => void;
 }
 
 const CartContext = createContext<CartContextProps | undefined>(undefined);
 
-interface CartProviderProps {
-  children: ReactNode; // Adiciona a tipagem para children
-}
+export const CartProvider: React.FC = ({ children }) => {
+  const [items, setItems] = useState<Product[]>([]);
+  const [itemCount, setItemCount] = useState(0);
 
-export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
-  const [items, setItems] = useState<number[]>([]);
-  const [itemCount, setItemCount] = useState(0); // Inicializa a contagem como 0
-
-  const addItem = (itemId: number) => {
-    setItems((prevItems) => [...prevItems, itemId]);
-    setItemCount((prevCount) => prevCount + 1); // Atualiza a contagem
+  const addItem = (product: Product) => {
+    setItems((prevItems) => [...prevItems, product]);
+    setItemCount((prevCount) => prevCount + 1);
   };
 
   return (

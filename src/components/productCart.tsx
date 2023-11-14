@@ -1,6 +1,4 @@
 import Image from "next/image";
-
-import Produto from "@/assets/produto.png";
 import {
   Container,
   NamePriceContainer,
@@ -8,14 +6,24 @@ import {
   PriceQuant,
 } from "@/styles/productCartComp";
 
-export default function ProductCart() {
+interface ProductCartProps {
+  product: {
+    id: number;
+    name: string;
+    price: number;
+    description: string;
+    photo: string;
+  };
+}
+
+const ProductCart: React.FC<ProductCartProps> = ({ product }) => {
   return (
     <Container>
       <PhotoContainer>
-        <Image src={Produto} alt="" width={117} height={148} />
+        <Image src={product.photo} alt={product.name} width={117} height={148} />
       </PhotoContainer>
       <NamePriceContainer>
-        <h3>Apple Watch Series 4 GPS</h3>
+        <h3>{product.name}</h3>
       </NamePriceContainer>
       <PriceQuant>
         <div>
@@ -24,9 +32,11 @@ export default function ProductCart() {
           <p>+</p>
         </div>
         <section>
-          R$ <span>399</span>
+          R$ <span>{product.price}</span>
         </section>
       </PriceQuant>
     </Container>
   );
-}
+};
+
+export default ProductCart;
